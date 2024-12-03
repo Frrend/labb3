@@ -17,6 +17,7 @@ int main(void) {
 
         printf("%d", age[0]);
 
+
     }
     return 0;
 }
