@@ -1,0 +1,3 @@
+C:\Users\edual\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\labb3.dir/objects.a
+C:\Users\edual\AppData\Local\Programs\CLion\bin\mingw\bin\ar.exe qc CMakeFiles\labb3.dir/objects.a @CMakeFiles\labb3.dir\objects1.rsp
+C:\Users\edual\AppData\Local\Programs\CLion\bin\mingw\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\labb3.dir/objects.a -Wl,--no-whole-archive -o labb3.exe -Wl,--out-implib,liblabb3.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\labb3.dir\linkLibs.rsp
