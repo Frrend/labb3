@@ -19,8 +19,10 @@ CMakeFiles/labb3.dir/main.c.obj: C:/Users/edual/CLionProjects/labb3/main.c \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+  C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/string_s.h \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/stdio.h \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/stdlib.h \
+  C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/string.h \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl \
   C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/vadefs.h
 
@@ -63,8 +65,12 @@ C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include
 
 C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdio_s.h:
 
+C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/string_s.h:
+
 C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/stdio.h:
 
-C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl:
-
 C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/vadefs.h:
+
+C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/string.h:
+
+C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl:
