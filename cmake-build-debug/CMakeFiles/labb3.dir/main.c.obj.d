@@ -20,6 +20,4 @@ CMakeFiles/labb3.dir/main.c.obj: \
  C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
  C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
  C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
- C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/errno.h \
- C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/string.h \
- C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/sec_api/string_s.h
+ C:/Users/edual/AppData/Local/Programs/CLion/bin/mingw/x86_64-w64-mingw32/include/errno.h

@@ -1,38 +1,63 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-void carRegister(char vehicleType[10], char brand[10], char plateNumber[6], char name[10], char age_[3]) {
-    printf("Vehicle owners name: ");
-    fgets(name, 10, stdin);
-
-    printf("Owners age: ");
-    fgets(age_, 3, stdin);
-
-    printf("Vehicle type: ");
-    fgets(vehicleType, 10, stdin);
-
-    printf("Car brand: ");
-    fgets(brand, 10, stdin);
-
-    printf("Vehicle plate number: ");
-    fgets(plateNumber, 6, stdin);
-}
 
 int main(void) {
-    char name[10];
-    char age_[4];
-    char vehicleType[10];
-    char brand[10];
-    char plateNumber[6];
+    int input = 1;
+    int vehiclelist[10];
 
-    carRegister(vehicleType, brand, plateNumber, name, age_);
-    int age = atoi(age_);
+    struct owner {
+        char name[10];
+        char age[3];
+    };
 
-    printf("Name: %s\n", name);
-    printf("Age: %d\n", age);
-    printf("Vehicle Type: %s\n", vehicleType);
-    printf("Car Brand: %s\n", brand);
-    printf("Plate Number: %s\n", plateNumber);
-    return 0;
+    struct vehicle {
+        char vehicleType[10];
+        char brand[10];
+        char plateNumber[6];
+        struct owner owner;
+    };
+
+    printf("1. Add Vehicle\n2. Remove Vehicle\n3. Sort\n4. Show Vehicle\n5. Show Registry\n0. Quit\n>");
+
+    while (input != 0) {
+        char _input[2];
+        fgets(_input, 2, stdin);
+        input = atoi(_input);
+
+        if (input > 5 || input < 0) {
+            continue;
+        }
+
+        switch (input) {
+            case 1:
+                struct vehicle new;
+                printf("Vehicle type: ");
+                fgets(new.vehicleType, 10, stdin);
+
+                printf("Vehicle brand: ");
+                fgets(new.brand, 10, stdin);
+
+                printf("Vehicle plate number: ");
+                fgets(new.plateNumber, 6, stdin);
+
+                printf("Owner name: ");
+                fgets(new.owner.name, 10, stdin);
+
+                printf("Owner age: ");
+                fgets(new.owner.age, 3, stdin);
+                break;
+
+
+            case 2: printf("2");
+                break;
+            case 3: printf("3");
+                break;
+            case 4: printf("4");
+                break;
+            case 5: printf("5");
+                break;
+            case 0: return 0;
+        }
+    }
 }
