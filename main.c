@@ -4,9 +4,8 @@
 
 struct Owner {
     char name[10];
-    char age[3];
+    char age[4];
 };
-
 struct Vehicle {
     char vehicleType[10];
     char brand[10];
@@ -14,7 +13,40 @@ struct Vehicle {
     struct Owner owner;
 };
 
+void add_vehicle(FILE *registrationFile) {
+    struct Vehicle newVehicle;
+
+    printf("Vehicle type: ");
+    fgets(newVehicle.vehicleType, 10, stdin);
+    newVehicle.vehicleType[strcspn(newVehicle.vehicleType, "\n")] = '\0';
+
+    printf("Vehicle brand: ");
+    fgets(newVehicle.brand, 10, stdin);
+    newVehicle.brand[strcspn(newVehicle.brand, "\n")] = '\0';
+
+    printf("Vehicle plate number: ");
+    fgets(newVehicle.plateNumber, 6, stdin);
+    newVehicle.plateNumber[strcspn(newVehicle.plateNumber, "\n")] = '\0';
+
+    printf("Owner name: ");
+    fgets(newVehicle.owner.name, 10, stdin);
+    newVehicle.owner.name[strcspn(newVehicle.owner.name, "\n")] = '\0';
+
+    printf("Owner age: ");
+    fgets(newVehicle.owner.age, 4, stdin);
+    newVehicle.owner.age[strcspn(newVehicle.owner.age, "\n")] = '\0';
+
+    fwrite(&newVehicle, sizeof(struct Vehicle), 1, registrationFile);
+}
+
 int main(void) {
+
+    FILE *registrationFile = NULL;
+
+    if ((registrationFile = fopen("registry.bin", "ab+")) == NULL) {
+        printf("Failed to open file");
+    }
+
     int input = 1;
 
     while (input != 0) {
@@ -25,34 +57,13 @@ int main(void) {
             input = atoi(_input);
 
             if (input > 5 || input < 0) {
-                printf("Invalid input, please try again.\n");
+                printf("Invalid input, please try again.\n\n");
                 continue;
             }
 
             switch (input) {
                 case 1: {
-                    struct Vehicle newVehicle;
-
-                    printf("Vehicle type: ");
-                    fgets(newVehicle.vehicleType, 10, stdin);
-                    newVehicle.vehicleType[strcspn(newVehicle.vehicleType, "\n")] = '\0';
-
-                    printf("Vehicle brand: ");
-                    fgets(newVehicle.brand, 10, stdin);
-                    newVehicle.brand[strcspn(newVehicle.brand, "\n")] = '\0';
-
-                    printf("Vehicle plate number: ");
-                    fgets(newVehicle.plateNumber, 6, stdin);
-                    newVehicle.plateNumber[strcspn(newVehicle.plateNumber, "\n")] = '\0';
-
-                    printf("Owner name: ");
-                    fgets(newVehicle.owner.name, 10, stdin);
-                    newVehicle.owner.name[strcspn(newVehicle.owner.name, "\n")] = '\0';
-
-                    printf("Owner age: ");
-                    fgets(newVehicle.owner.age, 3, stdin);
-                    newVehicle.owner.age[strcspn(newVehicle.owner.age, "\n")] = '\0';
-
+                    add_vehicle(registrationFile);
                     break;
                 }
 
@@ -71,5 +82,6 @@ int main(void) {
             }
         }
     }
+    fclose(registrationFile);
     return 0;
 }
