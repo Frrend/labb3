@@ -54,14 +54,6 @@ void vehicle_register(FILE *registrationFile) {
     }
 }
 
-int input_checker(const int input) {
-    if (input > 5 || input < 0) {
-        printf("Invalid input, please try again.\n\n");
-        return 1;
-    }
-    return 0;
-}
-
 int main(void) {
     FILE *registrationFile = fopen("registry.bin", "ab+");
     if (registrationFile == NULL) {
@@ -78,12 +70,9 @@ int main(void) {
         if (fgets(_input, 3, stdin) != NULL) {
             input = atoi(_input);
 
-            if (input_checker(input) == 1) continue;
-
             switch (input) {
                 case 1: add_vehicle(registrationFile);
                     break;
-
                 case 2:
                     printf("Remove Vehicle functionality not implemented yet.\n");
                     break;
@@ -96,6 +85,7 @@ int main(void) {
                 case 5:
                     vehicle_register(registrationFile);
                     break;
+                default: printf("Invalid input, please try again.\n\n");
             }
         }
     }
