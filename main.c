@@ -6,6 +6,7 @@ struct Owner {
     char name[10];
     char age[4];
 };
+
 struct Vehicle {
     char vehicleType[10];
     char brand[10];
@@ -17,34 +18,55 @@ void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
     printf("Vehicle type: ");
-    fgets(newVehicle.vehicleType, 10, stdin);
+    fgets(newVehicle.vehicleType, sizeof(newVehicle.vehicleType), stdin);
     newVehicle.vehicleType[strcspn(newVehicle.vehicleType, "\n")] = '\0';
 
     printf("Vehicle brand: ");
-    fgets(newVehicle.brand, 10, stdin);
+    fgets(newVehicle.brand, sizeof(newVehicle.brand), stdin);
     newVehicle.brand[strcspn(newVehicle.brand, "\n")] = '\0';
 
     printf("Vehicle plate number: ");
-    fgets(newVehicle.plateNumber, 6, stdin);
+    fgets(newVehicle.plateNumber, sizeof(newVehicle.plateNumber), stdin);
     newVehicle.plateNumber[strcspn(newVehicle.plateNumber, "\n")] = '\0';
 
     printf("Owner name: ");
-    fgets(newVehicle.owner.name, 10, stdin);
+    fgets(newVehicle.owner.name, sizeof(newVehicle.owner.name), stdin);
     newVehicle.owner.name[strcspn(newVehicle.owner.name, "\n")] = '\0';
 
     printf("Owner age: ");
-    fgets(newVehicle.owner.age, 4, stdin);
+    fgets(newVehicle.owner.age, sizeof(newVehicle.owner.age), stdin);
     newVehicle.owner.age[strcspn(newVehicle.owner.age, "\n")] = '\0';
 
     fwrite(&newVehicle, sizeof(struct Vehicle), 1, registrationFile);
 }
 
+void vehicle_register(FILE *registrationFile) {
+    rewind(registrationFile); // Start reading from the beginning
+    struct Vehicle newVehicle;
+    int i = 1;
+    printf("___________________________\n");
+
+    while (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) == 1) {
+        printf(
+            "%d.\n\tPlate number: %s\n\tVehicle brand: %s\n\tVehicle type: %s\n___________________________\n",
+            i, newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType);
+        i++;
+    }
+}
+
+int input_checker(const int input) {
+    if (input > 5 || input < 0) {
+        printf("Invalid input, please try again.\n\n");
+        return 1;
+    }
+    return 0;
+}
+
 int main(void) {
-
-    FILE *registrationFile = NULL;
-
-    if ((registrationFile = fopen("registry.bin", "ab+")) == NULL) {
+    FILE *registrationFile = fopen("registry.bin", "ab+");
+    if (registrationFile == NULL) {
         printf("Failed to open file");
+        exit(1);
     }
 
     int input = 1;
@@ -56,16 +78,11 @@ int main(void) {
         if (fgets(_input, 3, stdin) != NULL) {
             input = atoi(_input);
 
-            if (input > 5 || input < 0) {
-                printf("Invalid input, please try again.\n\n");
-                continue;
-            }
+            if (input_checker(input) == 1) continue;
 
             switch (input) {
-                case 1: {
-                    add_vehicle(registrationFile);
+                case 1: add_vehicle(registrationFile);
                     break;
-                }
 
                 case 2:
                     printf("Remove Vehicle functionality not implemented yet.\n");
@@ -77,7 +94,7 @@ int main(void) {
                     printf("Show Vehicle functionality not implemented yet.\n");
                     break;
                 case 5:
-                    printf("Show Registry functionality not implemented yet.\n");
+                    vehicle_register(registrationFile);
                     break;
             }
         }
