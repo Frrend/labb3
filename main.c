@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+// TODO magic variables.
 struct Owner {
     char name[10];
     char age[4];
@@ -14,6 +14,8 @@ struct Vehicle {
     struct Owner owner;
 };
 
+// TODO fix inputting numbers for age (int needed). The program should not crash.
+// TODO adding a Vehicle when the amount is full.
 void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
@@ -54,6 +56,7 @@ void vehicle_register(FILE *registrationFile) {
     }
 }
 
+// TODO trying to search after car number -1 and 13.
 // TODO fix searching after unsigned car.
 void vehicle_search(FILE *registrationFile, char *_input, int *input) {
     rewind(registrationFile);
@@ -73,6 +76,7 @@ void vehicle_search(FILE *registrationFile, char *_input, int *input) {
     *input = 1;
 }
 
+// TODO fix string input crashes the program.
 int main(void) {
     FILE *registrationFile = fopen("registry.bin", "ab+");
     if (registrationFile == NULL) {
