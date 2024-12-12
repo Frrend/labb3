@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -82,7 +83,6 @@ void vehicle_search(FILE *registrationFile) {
         newVehicle.owner.age);
 }
 
-// TODO fix string input crashes the program.
 int main(void) {
     FILE *registrationFile = fopen("registry.bin", "ab+");
     if (registrationFile == NULL) {
@@ -96,6 +96,12 @@ int main(void) {
     while (input != 0) {
         printf("1. Add Vehicle\n2. Remove Vehicle\n3. Sort\n4. Show Vehicle\n5. Show Registry\n0. Quit\n>");
         if (fgets(_input, sizeof(_input) - 1, stdin) != NULL) {
+
+            // Can you use this?
+            if(isdigit(*_input) == 0) {
+                puts("Invalid input!");
+                continue;
+            }
             input = atoi(_input);
 
             switch (input) {
@@ -117,5 +123,4 @@ int main(void) {
             }
         }
     }
-    return 0;
 }
