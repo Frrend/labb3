@@ -19,6 +19,12 @@ struct Vehicle {
 void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
+    fseek(registrationFile, 0, SEEK_END);
+    if (ftell(registrationFile) / sizeof(struct Vehicle) >= 10) {
+        printf("you have reached the max car amount\n");
+        return;
+    }
+
     printf("Vehicle type: ");
     fgets(newVehicle.vehicleType, sizeof(newVehicle.vehicleType), stdin);
     newVehicle.vehicleType[strcspn(newVehicle.vehicleType, "\n")] = '\0';
@@ -73,7 +79,6 @@ void vehicle_search(FILE *registrationFile, char *_input, int *input) {
         "\n___________________________\nPlate number: %s\nVehicle brand: %s\nVehicle type: %s \nVehicle owner: %s\nOwner age: %s\n___________________________\n"
         , newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType, newVehicle.owner.name,
         newVehicle.owner.age);
-    *input = 1;
 }
 
 // TODO fix string input crashes the program.
@@ -106,10 +111,10 @@ int main(void) {
                     break;
                 case 5: vehicle_register(registrationFile);
                     break;
+                case 0: fclose(registrationFile); return 0;
                 default: printf("Invalid input, please try again.\n\n");
             }
         }
     }
-    fclose(registrationFile);
     return 0;
 }
