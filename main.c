@@ -4,14 +4,14 @@
 
 // TODO magic variables.
 struct Owner {
-    char name[10];
-    char age[4];
+    char name[32];
+    char age[10];
 };
 
 struct Vehicle {
-    char vehicleType[10];
-    char brand[10];
-    char plateNumber[6];
+    char vehicleType[32];
+    char brand[32];
+    char plateNumber[32];
     struct Owner owner;
 };
 
@@ -65,11 +65,10 @@ void vehicle_register(FILE *registrationFile) {
 void vehicle_search(FILE *registrationFile) {
     rewind(registrationFile);
     struct Vehicle newVehicle;
-    int vehicleIndex;
-    char _vehicleIndex[3];
+    char _vehicleIndex[32];
 
-    fgets(_vehicleIndex, 3, stdin);
-    vehicleIndex = atoi(_vehicleIndex) - 1;
+    fgets(_vehicleIndex, sizeof(_vehicleIndex) - 1, stdin);
+    const int vehicleIndex = atoi(_vehicleIndex) - 1;
 
     fseek(registrationFile, sizeof(struct Vehicle) * vehicleIndex, SEEK_SET);
     if (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) != 1) {
@@ -92,12 +91,11 @@ int main(void) {
     }
 
     int input = 1;
+    char _input[32] = "";
 
     while (input != 0) {
         printf("1. Add Vehicle\n2. Remove Vehicle\n3. Sort\n4. Show Vehicle\n5. Show Registry\n0. Quit\n>");
-
-        char _input[3] = "";
-        if (fgets(_input, 3, stdin) != NULL) {
+        if (fgets(_input, sizeof(_input) - 1, stdin) != NULL) {
             input = atoi(_input);
 
             switch (input) {
