@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <_mingw_mac.h>
 
 // TODO magic variables.
 struct Owner {
     char name[32];
-    char age[10];
+    int age;
 };
 
 struct Vehicle {
@@ -16,7 +17,6 @@ struct Vehicle {
     struct Owner owner;
 };
 
-// TODO fix inputting numbers for age (int needed). The program should not crash.
 void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
@@ -43,8 +43,19 @@ void add_vehicle(FILE *registrationFile) {
     newVehicle.owner.name[strcspn(newVehicle.owner.name, "\n")] = '\0';
 
     printf("Owner age: ");
-    fgets(newVehicle.owner.age, sizeof(newVehicle.owner.age), stdin);
-    newVehicle.owner.age[strcspn(newVehicle.owner.age, "\n")] = '\0';
+    int age = 0;
+    char _age[32];
+    int looper = 1;
+    while (looper) {
+        fgets(_age, sizeof(newVehicle.owner.age), stdin);
+        if (isdigit(*_age) == 0) {
+            printf("Input must be a digit\n> ");
+            continue;
+        }
+        age = atoi(_age);
+        looper = 0;
+    }
+    newVehicle.owner.age = age;
 
     fwrite(&newVehicle, sizeof(struct Vehicle), 1, registrationFile);
 }
@@ -78,7 +89,7 @@ void vehicle_search(FILE *registrationFile) {
     }
 
     printf(
-        "\n___________________________\nPlate number: %s\nVehicle brand: %s\nVehicle type: %s \nVehicle owner: %s\nOwner age: %s\n___________________________\n"
+        "\n___________________________\nPlate number: %s\nVehicle brand: %s\nVehicle type: %s \nVehicle owner: %s\nOwner age: %d\n___________________________\n"
         , newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType, newVehicle.owner.name,
         newVehicle.owner.age);
 }
@@ -90,19 +101,17 @@ int main(void) {
         exit(1);
     }
 
-    int input = 1;
     char _input[32] = "";
 
-    while (input != 0) {
+    while (1) {
         printf("1. Add Vehicle\n2. Remove Vehicle\n3. Sort\n4. Show Vehicle\n5. Show Registry\n0. Quit\n>");
         if (fgets(_input, sizeof(_input) - 1, stdin) != NULL) {
-
             // Can you use this?
-            if(isdigit(*_input) == 0) {
-                puts("Invalid input!");
+            if (isdigit(*_input) == 0) {
+                puts("Invalid input, please try again.\n");
                 continue;
             }
-            input = atoi(_input);
+            int input = atoi(_input);
 
             switch (input) {
                 case 1: add_vehicle(registrationFile);
