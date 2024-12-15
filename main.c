@@ -4,16 +4,18 @@
 #include <string.h>
 #include <_mingw_mac.h>
 
-// TODO magic variables.
+#define MAX_INPUT_SIZE 32
+#define MAX_VEHICLE_AMOUNT 10
+
 struct Owner {
-    char name[32];
+    char name[MAX_INPUT_SIZE];
     int age;
 };
 
 struct Vehicle {
-    char vehicleType[32];
-    char brand[32];
-    char plateNumber[32];
+    char vehicleType[MAX_INPUT_SIZE];
+    char brand[MAX_INPUT_SIZE];
+    char plateNumber[MAX_INPUT_SIZE];
     struct Owner owner;
 };
 
@@ -21,7 +23,7 @@ void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
     fseek(registrationFile, 0, SEEK_END);
-    if (ftell(registrationFile) / sizeof(struct Vehicle) >= 10) {
+    if (ftell(registrationFile) / sizeof(struct Vehicle) >= MAX_VEHICLE_AMOUNT) {
         printf("you have reached the max car amount\n");
         return;
     }
@@ -44,9 +46,9 @@ void add_vehicle(FILE *registrationFile) {
 
     printf("Owner age: ");
     int age = 0;
-    char _age[32];
     int looper = 1;
     while (looper) {
+        char _age[MAX_INPUT_SIZE];
         fgets(_age, sizeof(newVehicle.owner.age), stdin);
         if (isdigit(*_age) == 0) {
             printf("Input must be a digit\n> ");
@@ -77,7 +79,7 @@ void vehicle_register(FILE *registrationFile) {
 void vehicle_search(FILE *registrationFile) {
     rewind(registrationFile);
     struct Vehicle newVehicle;
-    char _vehicleIndex[32];
+    char _vehicleIndex[MAX_INPUT_SIZE];
 
     fgets(_vehicleIndex, sizeof(_vehicleIndex) - 1, stdin);
     const int vehicleIndex = atoi(_vehicleIndex) - 1;
@@ -101,7 +103,7 @@ int main(void) {
         exit(1);
     }
 
-    char _input[32] = "";
+    char _input[MAX_INPUT_SIZE] = "";
 
     while (1) {
         printf("1. Add Vehicle\n2. Remove Vehicle\n3. Sort\n4. Show Vehicle\n5. Show Registry\n0. Quit\n>");
