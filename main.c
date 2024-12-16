@@ -22,7 +22,6 @@ struct Vehicle {
 void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
-    fseek(registrationFile, 0, SEEK_END);
     if (ftell(registrationFile) / sizeof(struct Vehicle) >= MAX_VEHICLE_AMOUNT) {
         printf("you have reached the max car amount\n");
         return;
@@ -63,7 +62,6 @@ void add_vehicle(FILE *registrationFile) {
 }
 
 void vehicle_register(FILE *registrationFile) {
-    rewind(registrationFile);
     struct Vehicle newVehicle;
     int i = 1;
     printf("___________________________\n");
@@ -77,12 +75,11 @@ void vehicle_register(FILE *registrationFile) {
 }
 
 void vehicle_search(FILE *registrationFile) {
-    rewind(registrationFile);
     struct Vehicle newVehicle;
     char _vehicleIndex[MAX_INPUT_SIZE];
 
     fgets(_vehicleIndex, sizeof(_vehicleIndex) - 1, stdin);
-    const int vehicleIndex = atoi(_vehicleIndex) - 1;
+    int vehicleIndex = atoi(_vehicleIndex) - 1;
 
     fseek(registrationFile, sizeof(struct Vehicle) * vehicleIndex, SEEK_SET);
     if (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) != 1) {
@@ -96,6 +93,41 @@ void vehicle_search(FILE *registrationFile) {
         newVehicle.owner.age);
 }
 
+void vehicle_sorter(FILE *registrationFile) {
+    struct Vehicle newVehicle;
+    struct Vehicle carList[MAX_VEHICLE_AMOUNT];
+    int vehicleCount = 0;
+
+    while (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) == 1) {
+        carList[vehicleCount] = newVehicle;
+        vehicleCount++;
+    }
+
+    for (int i = 0; 10 > i; i++) {
+        for (int j = 0; j < strlen(carList[j].brand); j++) {
+            carList[i].brand[j] = tolower(carList[i].brand[j]);
+        }
+    }
+
+    for (int i = 0; i < vehicleCount - 1; i++) {
+        for (int j = 0; j < vehicleCount - 1 - i; j++) {
+            if (strcmp(carList[j].brand, carList[j + 1].brand) > 0) {
+                struct Vehicle holder = carList[j];
+                carList[j] = carList[j + 1];
+                carList[j + 1] = holder;
+            }
+        }
+    }
+
+    printf("\n___________________________\n");
+    for (int i = 0; i < vehicleCount; i++) {
+        printf(
+            "Plate number: %s\nVehicle brand: %s\nVehicle type: %s \nVehicle owner: %s\nOwner age: %d\n___________________________\n"
+            , carList[i].plateNumber, carList[i].brand, carList[i].vehicleType, carList[i].owner.name,
+            carList[i].owner.age);
+    }
+}
+
 int main(void) {
     FILE *registrationFile = fopen("registry.bin", "ab+");
     if (registrationFile == NULL) {
@@ -106,32 +138,33 @@ int main(void) {
     char _input[MAX_INPUT_SIZE] = "";
 
     while (1) {
+        rewind(registrationFile);
         printf("1. Add Vehicle\n2. Remove Vehicle\n3. Sort\n4. Show Vehicle\n5. Show Registry\n0. Quit\n>");
-        if (fgets(_input, sizeof(_input) - 1, stdin) != NULL) {
-            // Can you use this?
-            if (isdigit(*_input) == 0) {
-                puts("Invalid input, please try again.\n");
-                continue;
-            }
-            int input = atoi(_input);
+        if (fgets(_input, sizeof(_input) - 1, stdin) == NULL) continue;
 
-            switch (input) {
-                case 1: add_vehicle(registrationFile);
-                    break;
-                case 2:
-                    printf("Remove Vehicle functionality not implemented yet.\n");
-                    break;
-                case 3:
-                    printf("Sort functionality not implemented yet.\n");
-                    break;
-                case 4: vehicle_search(registrationFile);
-                    break;
-                case 5: vehicle_register(registrationFile);
-                    break;
-                case 0: fclose(registrationFile);
-                    return 0;
-                default: printf("Invalid input, please try again.\n\n");
-            }
+        // Can you use this?
+        if (isdigit(*_input) == 0) {
+            puts("Invalid input, please try again.\n");
+            continue;
+        }
+
+        int input = atoi(_input);
+
+        switch (input) {
+            case 1: add_vehicle(registrationFile);
+                break;
+            case 2:
+                printf("Remove Vehicle functionality not implemented yet.\n");
+                break;
+            case 3: vehicle_sorter(registrationFile);
+                break;
+            case 4: vehicle_search(registrationFile);
+                break;
+            case 5: vehicle_register(registrationFile);
+                break;
+            case 0: fclose(registrationFile);
+                return 0;
+            default: printf("Invalid input, please try again.\n\n");
         }
     }
 }
