@@ -23,7 +23,7 @@ void add_vehicle(FILE *registrationFile) {
     struct Vehicle newVehicle;
 
     if (ftell(registrationFile) / sizeof(struct Vehicle) >= MAX_VEHICLE_AMOUNT) {
-        printf("you have reached the max car amount\n");
+        printf("You have reached the max car amount\n");
         return;
     }
 
@@ -61,36 +61,40 @@ void add_vehicle(FILE *registrationFile) {
     fwrite(&newVehicle, sizeof(struct Vehicle), 1, registrationFile);
 }
 
-void vehicle_register(FILE *registrationFile) {
+void vehicle_delete(FILE *registrationFile) {
+    printf("Vehicle position to delete: ");
+    int delete = 0;
+    int looper = 1;
+    while (looper) {
+        char _delete[MAX_INPUT_SIZE];
+        fgets(_delete, sizeof(_delete), stdin);
+        if (isdigit(*_delete) == 0) {
+            printf("Input must be a digit\n> ");
+            continue;
+        }
+        delete = atoi(_delete) - 1;
+        looper = 0;
+    }
+
     struct Vehicle newVehicle;
-    int i = 1;
-    printf("___________________________\n");
+    struct Vehicle carList[MAX_VEHICLE_AMOUNT];
+    int vehicleCount = 0;
 
     while (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) == 1) {
-        printf(
-            "%d.\n\tPlate number: %s\n\tVehicle brand: %s\n\tVehicle type: %s\n___________________________\n",
-            i, newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType);
-        i++;
-    }
-}
-
-void vehicle_search(FILE *registrationFile) {
-    struct Vehicle newVehicle;
-    char _vehicleIndex[MAX_INPUT_SIZE];
-
-    fgets(_vehicleIndex, sizeof(_vehicleIndex) - 1, stdin);
-    int vehicleIndex = atoi(_vehicleIndex) - 1;
-
-    fseek(registrationFile, sizeof(struct Vehicle) * vehicleIndex, SEEK_SET);
-    if (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) != 1) {
-        printf("No vehicle found at the given number.\n");
-        return;
+        carList[vehicleCount] = newVehicle;
+        vehicleCount++;
     }
 
-    printf(
-        "\n___________________________\nPlate number: %s\nVehicle brand: %s\nVehicle type: %s \nVehicle owner: %s\nOwner age: %d\n___________________________\n"
-        , newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType, newVehicle.owner.name,
-        newVehicle.owner.age);
+    for (int i = delete; i < vehicleCount - 1; i++) {
+        carList[i] = carList[i + 1];
+    }
+
+    FILE *deleteFromFile = fopen("registry.bin", "wa");
+
+    for (int i = 0; i < vehicleCount - 1; i++) {
+        fwrite(&carList[i], sizeof(struct Vehicle), 1, deleteFromFile);
+    }
+    fclose(deleteFromFile);
 }
 
 void vehicle_sorter(FILE *registrationFile) {
@@ -128,6 +132,39 @@ void vehicle_sorter(FILE *registrationFile) {
     }
 }
 
+void vehicle_search(FILE *registrationFile) {
+    struct Vehicle newVehicle;
+    char _vehicleIndex[MAX_INPUT_SIZE];
+
+    fgets(_vehicleIndex, sizeof(_vehicleIndex) - 1, stdin);
+    int vehicleIndex = atoi(_vehicleIndex) - 1;
+
+    fseek(registrationFile, sizeof(struct Vehicle) * vehicleIndex, SEEK_SET);
+    if (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) != 1) {
+        printf("No vehicle found at the given number.\n");
+        return;
+    }
+
+    printf(
+        "\n___________________________\nPlate number: %s\nVehicle brand: %s\nVehicle type: %s \nVehicle owner: %s\nOwner age: %d\n___________________________\n"
+        , newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType, newVehicle.owner.name,
+        newVehicle.owner.age);
+}
+
+void vehicle_register(FILE *registrationFile) {
+    struct Vehicle newVehicle;
+    int i = 1;
+    printf("___________________________\n");
+
+    while (fread(&newVehicle, sizeof(struct Vehicle), 1, registrationFile) == 1) {
+        printf(
+            "%d.\n\tPlate number: %s\n\tVehicle brand: %s\n\tVehicle type: %s\n___________________________\n",
+            i, newVehicle.plateNumber, newVehicle.brand, newVehicle.vehicleType);
+        i++;
+    }
+}
+
+
 int main(void) {
     FILE *registrationFile = fopen("registry.bin", "ab+");
     if (registrationFile == NULL) {
@@ -153,8 +190,7 @@ int main(void) {
         switch (input) {
             case 1: add_vehicle(registrationFile);
                 break;
-            case 2:
-                printf("Remove Vehicle functionality not implemented yet.\n");
+            case 2: vehicle_delete(registrationFile);
                 break;
             case 3: vehicle_sorter(registrationFile);
                 break;
